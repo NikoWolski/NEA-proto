@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using ConsoleApp1;
+using System;
 
 namespace Prototype
 {
@@ -13,37 +7,66 @@ namespace Prototype
     {
         static void Main(string[] args)
         {
-            string[,] teacherandsubject = new string[6, 3];
-            int teachercounter = 0, subjectcounter = 0, testcounter = 0;
-            using (StreamReader sr = new StreamReader("contents.txt"))
+            //Console.WriteLine("What paramaters would you like?");
+            //int x = int.Parse(Console.ReadLine()); int y = int.Parse(Console.ReadLine());
+            while (true)
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
+                Console.WriteLine("Would you like to display, add, remove or clear elements from the table?");
+                string choice = Console.ReadLine().ToLower();
+                Console.WriteLine(choice);
+                if (choice == "display")
                 {
-                    testcounter++;
-                    if (line.Contains("SubjectTest") || line.Contains("NameTest"))
-                    {
-                        teacherandsubject[teachercounter, subjectcounter] = line;
-                        subjectcounter++;
-                    }
-                    else
-                    {
-                        teachercounter++;
-                        subjectcounter = 0;
-                    }
-                    Console.Write(testcounter);
+                    Console.WriteLine("testing");
+                    ContentAssign assign = new ContentAssign();
+                    Console.WriteLine("testing");
+                    ContentDisplay display = new ContentDisplay();
+                    Console.WriteLine("testing");
+                    display.DisplayTable(assign.GetArray());
+                    Console.WriteLine("testing");
+                    Console.ReadKey();
                 }
-            }
-            for (int i = 0; i < teacherandsubject.GetLength(0); i++)
-            {
-                for (int j = 0; j < teacherandsubject.GetLength(1); j++)
+                else if (choice == "add")
                 {
-                    Console.Write(teacherandsubject[i, j] + '|');
+                    bool repeat = true;
+                    while (repeat)
+                    {
+                        Console.WriteLine("\rPlease insert the name of the individual you would like to add.");
+                        string name = Console.ReadLine();
+                        Console.WriteLine("Please insert both subjects.");
+                        string subject1 = Console.ReadLine();
+                        string subject2 = Console.ReadLine();
+                        _ = new ContentAdd(name, subject1, subject2);
+                        Console.WriteLine("Successfully added.\nWould you like to add another?");
+                        if (Console.ReadKey().KeyChar == 'n') { repeat = false; }
+                    }
                 }
-                Console.WriteLine();
+                else if (choice == "clear")
+                {
+                    Console.WriteLine("Are you sure you want to clear the table of elements?");
+                    switch (Console.ReadKey().KeyChar)
+                    {
+                        case 'y':
+                            _ = new ContentClear();
+                            Console.WriteLine("\rElements successfully cleared!");
+                            System.Threading.Thread.Sleep(1000);
+                            break;
+                        case 'n':
+                            break;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Invalid error!");
+                }
+                        //case "remove":
+                        //Console.WriteLine("Would you like to remove elements by name or by subject?");
+                        //ContentRemove removal = new ContentRemove(Console.ReadLine());
+                        //Console.WriteLine("Please enter the name of the individual you would like to remove from the table.");
+                        //removal.GetName(assign, Console.ReadLine());
+                        //break;
             }
-            Console.Write("------------------------------------");
-            Console.ReadLine();
+
         }
+
     }
 }
